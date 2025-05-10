@@ -5,10 +5,15 @@ import (
 
 	"github.com/VladislavKuch02/todo-app"
 	"github.com/VladislavKuch02/todo-app/package/handler"
+	"github.com/VladislavKuch02/todo-app/package/repository"
+	"github.com/VladislavKuch02/todo-app/package/service"
 )
 
 func main() {
-	handlers := new(handler.Handler)
+	repos := repository.NewRepository()
+	services := service.NewService(repos)
+	handlers := handler.NewHandler(services)
+
 	srv := new(todo.Server)
 	if err := srv.Run("8000", handlers.InitRoutes()); err != nil {
 		log.Fatalf("error ocoured while running http server: %s", err.Error())
